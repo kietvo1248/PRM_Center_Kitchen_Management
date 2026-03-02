@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.example.prm_center_kitchen_management">
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -12,7 +14,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.PRM_Center_Kitchen_Management">
         <activity
-            android:name=".MainActivity"
+            android:name=".activity.auth.LoginActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -20,6 +22,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".activity.roles.AdminMenuActivity" />
+        <activity android:name=".activity.roles.ManagerMenuActivity" />
+        <activity android:name=".activity.roles.SupplyCoordinatorActivity" />
+        <activity android:name=".activity.roles.KitchenStaffActivity" />
+        <activity android:name=".activity.roles.FranchiseStaffActivity" />
     </application>
 
 </manifest>
