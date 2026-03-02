@@ -5,10 +5,12 @@ import android.os.Bundle;
 import android.widget.Button;
 import androidx.appcompat.app.AppCompatActivity;
 import com.example.prm_center_kitchen_management.R;
+import com.example.prm_center_kitchen_management.activity.BaseActivity;
 import com.example.prm_center_kitchen_management.activity.auth.LoginActivity;
 import com.example.prm_center_kitchen_management.utils.SessionManager;
 
-public class SupplyCoordinatorActivity extends AppCompatActivity {
+
+public class SupplyCoordinatorActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

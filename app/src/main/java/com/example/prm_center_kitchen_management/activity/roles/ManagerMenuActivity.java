@@ -3,12 +3,13 @@ package com.example.prm_center_kitchen_management.activity.roles;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
-import androidx.appcompat.app.AppCompatActivity;
+//import androidx.appcompat.app.AppCompatActivity;
 import com.example.prm_center_kitchen_management.R;
 import com.example.prm_center_kitchen_management.activity.auth.LoginActivity;
 import com.example.prm_center_kitchen_management.utils.SessionManager;
+import com.example.prm_center_kitchen_management.activity.BaseActivity;
 
-public class ManagerMenuActivity extends AppCompatActivity {
+public class ManagerMenuActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

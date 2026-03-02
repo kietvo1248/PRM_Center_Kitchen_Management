@@ -6,7 +6,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
+//import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.prm_center_kitchen_management.R;
 import com.example.prm_center_kitchen_management.api.ApiClient;
@@ -14,6 +14,7 @@ import com.example.prm_center_kitchen_management.api.ApiService;
 import com.example.prm_center_kitchen_management.model.request.LoginRequest;
 import com.example.prm_center_kitchen_management.model.response.LoginResponse;
 import com.example.prm_center_kitchen_management.utils.SessionManager;
+import com.example.prm_center_kitchen_management.activity.BaseActivity;
 
 // Thêm imports cho các Activity phân quyền
 import com.example.prm_center_kitchen_management.activity.roles.AdminMenuActivity;
@@ -26,7 +27,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends BaseActivity {
 
     private EditText edtEmail, edtPassword;
     private Button btnLogin;
