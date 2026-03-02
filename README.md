@@ -26,7 +26,8 @@ Dự án **Center Kitchen Management** là một ứng dụng Android được t
    ```bash
    git clone <repository-url>
    ```
-   ```
+
+ 
 2. **Build project:**
    Chọn `File > Sync Project with Gradle Files` trong Android Studio.
 
