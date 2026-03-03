@@ -59,7 +59,7 @@ public class LoginActivity extends BaseActivity {
             return;
         }
 
-        ApiService apiService = ApiClient.getClient().create(ApiService.class);
+        ApiService apiService = ApiClient.getClient(this).create(ApiService.class);
         LoginRequest request = new LoginRequest(email, pass);
 
         // Gọi API bất đồng bộ
