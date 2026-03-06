@@ -5,6 +5,7 @@ import com.example.prm_center_kitchen_management.utils.SessionManager;
 import java.io.IOException;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
+import java.util.concurrent.TimeUnit;
 import okhttp3.Request;
 import okhttp3.Response;
 import retrofit2.Retrofit;
@@ -38,6 +39,9 @@ public class ApiClient {
             // Gắn Middleware vào Http Client
             OkHttpClient client = new OkHttpClient.Builder()
                     .addInterceptor(authInterceptor)
+//                    .connectTimeout(30, TimeUnit.SECONDS)
+//                    .readTimeout(30, TimeUnit.SECONDS)
+//                    .writeTimeout(30, TimeUnit.SECONDS)
                     .build();
 
             retrofit = new Retrofit.Builder()

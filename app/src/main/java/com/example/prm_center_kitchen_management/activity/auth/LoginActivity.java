@@ -14,7 +14,7 @@ import com.example.prm_center_kitchen_management.api.ApiService;
 import com.example.prm_center_kitchen_management.model.request.LoginRequest;
 import com.example.prm_center_kitchen_management.model.response.LoginResponse;
 import com.example.prm_center_kitchen_management.utils.SessionManager;
-import com.example.prm_center_kitchen_management.activity.BaseActivity;
+import com.example.prm_center_kitchen_management.activity.base.BaseActivity;
 
 // Thêm imports cho các Activity phân quyền
 import com.example.prm_center_kitchen_management.activity.roles.AdminMenuActivity;
@@ -59,6 +59,7 @@ public class LoginActivity extends BaseActivity {
             return;
         }
 
+        //ApiService apiService = ApiClient.getClient().create(ApiService.class);
         ApiService apiService = ApiClient.getClient(this).create(ApiService.class);
         LoginRequest request = new LoginRequest(email, pass);
 

@@ -5,7 +5,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.widget.Button;
 import com.example.prm_center_kitchen_management.R;
-import com.example.prm_center_kitchen_management.activity.BaseActivity;
+import com.example.prm_center_kitchen_management.activity.base.BaseActivity;
 import com.example.prm_center_kitchen_management.activity.auth.LoginActivity;
 import com.example.prm_center_kitchen_management.utils.SessionManager;
 

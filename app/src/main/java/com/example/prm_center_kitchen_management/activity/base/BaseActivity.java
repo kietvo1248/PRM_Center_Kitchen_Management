@@ -1,4 +1,4 @@
-package com.example.prm_center_kitchen_management.activity;
+package com.example.prm_center_kitchen_management.activity.base;
 
 import android.app.ProgressDialog;
 import android.widget.Toast;
