@@ -10,7 +10,7 @@ import com.example.prm_center_kitchen_management.activity.base.BaseNavigationAct
 
 //import com.example.prm_center_kitchen_management.activity.base.BaseActivity;
 //import com.example.prm_center_kitchen_management.activity.auth.LoginActivity;
-import com.example.prm_center_kitchen_management.fragment.roles.Manager.ManagerDashboardFragment;
+import com.example.prm_center_kitchen_management.fragment.roles.SupplyCoordinator.SupplyCoordinatorDashboardFragment;
 import com.example.prm_center_kitchen_management.fragment.share.ProfileFragment;
 import com.example.prm_center_kitchen_management.utils.SessionManager;
 
@@ -30,7 +30,7 @@ public class SupplyCoordinatorActivity extends BaseNavigationActivity {
             int itemId = item.getItemId();
 
             if (itemId == R.id.nav_supply_coordinator_dashboard) {
-                selectedFragment = new ManagerDashboardFragment();
+                selectedFragment = new SupplyCoordinatorDashboardFragment();
             }
             else if (itemId == R.id.nav_profile) {
                 selectedFragment = new ProfileFragment();

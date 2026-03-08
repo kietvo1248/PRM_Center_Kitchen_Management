@@ -5,7 +5,7 @@ import android.os.Bundle;
 import android.widget.Button;
 import androidx.fragment.app.Fragment;
 import com.example.prm_center_kitchen_management.activity.base.BaseNavigationActivity;
-import com.example.prm_center_kitchen_management.fragment.roles.Manager.ManagerDashboardFragment;
+import com.example.prm_center_kitchen_management.fragment.roles.KitchenStaff.KitchenStaffDashboardFragment;
 import com.example.prm_center_kitchen_management.fragment.share.ProfileFragment;
 import com.example.prm_center_kitchen_management.R;
 import com.example.prm_center_kitchen_management.activity.auth.LoginActivity;
@@ -27,7 +27,7 @@ public class KitchenStaffActivity extends BaseNavigationActivity {
             int itemId = item.getItemId();
 
             if (itemId == R.id.nav_kitchen_staff_dashboard) {
-                selectedFragment = new ManagerDashboardFragment();
+                selectedFragment = new KitchenStaffDashboardFragment();
             }
             else if (itemId == R.id.nav_profile) {
                 selectedFragment = new ProfileFragment();
