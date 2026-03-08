@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="wrap_content"
+    android:orientation="vertical" android:padding="20dp">
+
+    <TextView android:id="@+id/tvDetailTitle" android:layout_width="match_parent" android:layout_height="wrap_content" android:textStyle="bold" android:textSize="18sp" android:layout_marginBottom="8dp"/>
+    <TextView android:id="@+id/tvDetailStatus" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="16dp" android:textColor="#1976D2"/>
+
+    <ScrollView android:layout_width="match_parent" android:layout_height="200dp">
+        <LinearLayout android:id="@+id/layoutItemsContainer" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical"/>
+    </ScrollView>
+
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="end" android:layout_marginTop="16dp">
+        <Button android:id="@+id/btnCancelOrder" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Hủy Đơn Hàng" android:backgroundTint="#D32F2F" android:layout_marginEnd="12dp"/>
+        <Button android:id="@+id/btnCloseDetail" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Đóng"/>
+    </LinearLayout>
+</LinearLayout>

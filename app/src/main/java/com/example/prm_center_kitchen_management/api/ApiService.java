@@ -6,8 +6,13 @@ import com.example.prm_center_kitchen_management.model.response.LoginResponse;
 import com.example.prm_center_kitchen_management.model.response.UserProfileResponse;
 import com.example.prm_center_kitchen_management.model.response.CatalogResponse;
 import com.example.prm_center_kitchen_management.model.response.ShipmentResponse;
+import com.example.prm_center_kitchen_management.model.request.CreateOrderRequest;
+import com.example.prm_center_kitchen_management.model.response.OrderResponse;
+import com.example.prm_center_kitchen_management.model.response.OrderDetailResponse;
 
+import okhttp3.ResponseBody;
 import retrofit2.Call;
+import retrofit2.http.Path;
 import retrofit2.http.Query;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
@@ -44,5 +49,22 @@ public interface ApiService {
             @Query("toDate") String toDate
     );
 
+    // Manage Order in my store
+    @GET("orders/my-store")
+    Call<OrderResponse> getStoreOrders(
+            @Query("page") int page,
+            @Query("limit") int limit,
+            @Query("sortOrder") String sortOrder,
+            @Query("status") String status
+    );
+
+    @GET("orders/{id}")
+    Call<OrderDetailResponse> getOrderDetail(@Path("id") String id);
+
+    @POST("orders")
+    Call<ResponseBody> createOrder(@Body CreateOrderRequest request);
+
+    @PATCH("orders/franchise/{id}/cancel")
+    Call<ResponseBody> cancelOrder(@Path("id") String id);
 
 }

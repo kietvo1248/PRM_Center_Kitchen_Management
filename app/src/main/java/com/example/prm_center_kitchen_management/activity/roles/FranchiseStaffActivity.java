@@ -9,6 +9,7 @@ import com.example.prm_center_kitchen_management.activity.base.BaseNavigationAct
 
 
 import com.example.prm_center_kitchen_management.fragment.roles.FranchiseStaff.FranchiseStaffDashboardFragment;
+import com.example.prm_center_kitchen_management.fragment.roles.FranchiseStaff.FranchiseStoreOrdersFragment;
 import com.example.prm_center_kitchen_management.fragment.share.ProfileFragment;
 
 import com.example.prm_center_kitchen_management.activity.auth.LoginActivity;
@@ -31,6 +32,9 @@ public class FranchiseStaffActivity extends BaseNavigationActivity{
 
             if (itemId == R.id.nav_franchise_staff_dashboard) {
                 selectedFragment = new FranchiseStaffDashboardFragment();
+            }
+            else if (itemId == R.id.nav_franchise_orders) {
+                selectedFragment = new FranchiseStoreOrdersFragment();
             }
             else if (itemId == R.id.nav_profile) {
                 selectedFragment = new ProfileFragment();
