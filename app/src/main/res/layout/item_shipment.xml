@@ -37,4 +37,5 @@
         android:text="Ngày tạo: "
         android:textSize="12sp"
         android:textColor="#757575"/>
+
 </LinearLayout>
