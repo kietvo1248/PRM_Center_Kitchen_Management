@@ -142,6 +142,7 @@ public class FranchiseStoreOrdersFragment extends Fragment{
         TextView tvStatus = dialog.findViewById(R.id.tvDetailStatus);
         LinearLayout layoutItems = dialog.findViewById(R.id.layoutItemsContainer);
         Button btnCancel = dialog.findViewById(R.id.btnCancelOrder);
+        Button btnReceive = dialog.findViewById(R.id.btnReceiveOrder);
 
         tvTitle.setText("Mã Đơn: " + data.getId().substring(0, 8) + "...");
         tvStatus.setText("Trạng thái: " + data.getStatus().toUpperCase());
@@ -149,6 +150,11 @@ public class FranchiseStoreOrdersFragment extends Fragment{
         // Hiện nút hủy nếu trạng thái pending
         if (!"pending".equalsIgnoreCase(data.getStatus())) {
             btnCancel.setVisibility(View.GONE);
+        }
+        if ("delivering".equalsIgnoreCase(data.getStatus()) || "in_transit".equalsIgnoreCase(data.getStatus())) {
+            btnReceive.setVisibility(View.VISIBLE);
+        } else {
+            btnReceive.setVisibility(View.GONE);
         }
 
         // Đổ danh sách sản phẩm bằng code tự động vào ScrollView
@@ -168,7 +174,46 @@ public class FranchiseStoreOrdersFragment extends Fragment{
             dialog.dismiss();
         });
 
+        btnReceive.setOnClickListener(v -> {
+            confirmReceiveShipment(data.getId(), dialog);
+            dialog.dismiss();
+        });
+
+
         dialog.show();
+    }
+
+    private void confirmReceiveShipment(String orderId, Dialog dialog) {
+        if (getActivity() instanceof BaseActivity)
+            ((BaseActivity) getActivity()).showLoading("Đang nhận hàng...");
+        apiService.receiveAllShipment(orderId).enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(@NonNull Call<ResponseBody> call, @NonNull Response<ResponseBody> response) {
+                if (getActivity() instanceof BaseActivity)
+                    ((BaseActivity) getActivity()).hideLoading();
+                if (response.isSuccessful()) {
+                    if (isAdded()) {
+                        Toast.makeText(requireContext(), "Xác nhận nhận hàng thành công.", Toast.LENGTH_SHORT).show();
+                    }
+                    dialog.dismiss();
+                    fetchOrders(); // Tải lại danh sách đơn hàng
+                } else {
+                    if (isAdded()) {
+                        Toast.makeText(requireContext(), "Xác nhận thất bại!", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<ResponseBody> call, @NonNull Throwable t) {
+                if (getActivity() instanceof BaseActivity) {
+                    ((BaseActivity) getActivity()).hideLoading();
+                }
+                if (isAdded()) {
+                    Toast.makeText(requireContext(), "Lỗi kết nối mạng", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
 
     // Create, Cancel

@@ -67,6 +67,8 @@ public interface ApiService {
 
     @PATCH("orders/franchise/{id}/cancel")
     Call<ResponseBody> cancelOrder(@Path("id") String id);
+    @POST("shipments/{id}/receive-all")
+    Call<ResponseBody> receiveAllShipment(@Path("id") String id);
 
     @GET("inventory/store")
     Call<InventoryResponse> getStoreInventory(
