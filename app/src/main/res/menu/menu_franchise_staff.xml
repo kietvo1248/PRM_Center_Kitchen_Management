@@ -9,6 +9,10 @@
         android:id="@+id/nav_franchise_orders"
         android:icon="@android:drawable/btn_plus"
         android:title="Đơn Hàng" />
+    <item
+        android:id="@+id/nav_store_inventory"
+        android:icon="@android:drawable/ic_menu_myplaces"
+        android:title="Kho hàng" />
 
     <item
         android:id="@+id/nav_profile"

@@ -9,6 +9,7 @@ import com.example.prm_center_kitchen_management.model.response.ShipmentResponse
 import com.example.prm_center_kitchen_management.model.request.CreateOrderRequest;
 import com.example.prm_center_kitchen_management.model.response.OrderResponse;
 import com.example.prm_center_kitchen_management.model.response.OrderDetailResponse;
+import com.example.prm_center_kitchen_management.model.response.InventoryResponse;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -66,5 +67,13 @@ public interface ApiService {
 
     @PATCH("orders/franchise/{id}/cancel")
     Call<ResponseBody> cancelOrder(@Path("id") String id);
+
+    @GET("inventory/store")
+    Call<InventoryResponse> getStoreInventory(
+            @Query("page") int page,
+            @Query("limit") int limit,
+            @Query("sortBy") String sortBy,
+            @Query("sortOrder") String sortOrder,
+            @Query("search") String search);
 
 }
