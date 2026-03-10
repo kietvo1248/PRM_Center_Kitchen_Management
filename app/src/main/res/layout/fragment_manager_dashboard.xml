@@ -1,18 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:gravity="center"
-    android:orientation="vertical"
-    android:padding="20dp">
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:background="#F5F5F5">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Đây là menu của Manager"
-        android:textColor="#D32F2F"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        android:textAlignment="center"/>
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="16dp">
 
-</LinearLayout>
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="TỔNG QUAN HỆ THỐNG" android:textStyle="bold" android:textSize="18sp" android:layout_marginBottom="12dp" android:layout_marginTop="18dp"/>
+
+        <androidx.cardview.widget.CardView android:layout_width="match_parent" android:layout_height="wrap_content" app:cardCornerRadius="8dp" android:layout_marginBottom="12dp">
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="16dp" android:background="#E8F5E9">
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Tỷ lệ đáp ứng đơn hàng:" android:textStyle="bold"/>
+                <TextView android:id="@+id/tvFillRate" android:layout_width="wrap_content" android:layout_height="wrap_content" android:textSize="24sp" android:textColor="#388E3C" android:textStyle="bold" android:text="--%"/>
+                <TextView android:id="@+id/tvRequestedApproved" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Yêu cầu: -- | Duyệt: --"/>
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView android:layout_width="match_parent" android:layout_height="wrap_content" app:cardCornerRadius="8dp" android:layout_marginBottom="12dp">
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="16dp" android:background="#FFF3E0">
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Kho Trung Tâm:" android:textStyle="bold"/>
+                <TextView android:id="@+id/tvTotalProducts" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Tổng sản phẩm: --"/>
+                <TextView android:id="@+id/tvLowStock" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Sắp hết hàng: --" android:textColor="#E65100"/>
+                <TextView android:id="@+id/tvExpiring" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Sắp hết hạn: --" android:textColor="#D32F2F"/>
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView android:layout_width="match_parent" android:layout_height="wrap_content" app:cardCornerRadius="8dp" android:layout_marginBottom="16dp">
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="16dp" android:background="#FFEBEE">
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Hàng hủy trong năm:" android:textStyle="bold"/>
+                <TextView android:id="@+id/tvWasteTotal" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Tổng khối lượng: --" android:textColor="#D32F2F" android:textSize="16sp" android:textStyle="bold"/>
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="DANH SÁCH NHÀ CUNG CẤP" android:textStyle="bold" android:textSize="18sp" android:layout_marginBottom="8dp"/>
+
+        <androidx.recyclerview.widget.RecyclerView android:id="@+id/rvSuppliers" android:layout_width="match_parent" android:layout_height="wrap_content" android:nestedScrollingEnabled="false" />
+
+    </LinearLayout>
+</androidx.core.widget.NestedScrollView>

@@ -10,6 +10,10 @@ import com.example.prm_center_kitchen_management.model.request.CreateOrderReques
 import com.example.prm_center_kitchen_management.model.response.OrderResponse;
 import com.example.prm_center_kitchen_management.model.response.OrderDetailResponse;
 import com.example.prm_center_kitchen_management.model.response.InventoryResponse;
+import com.example.prm_center_kitchen_management.model.response.DashboardSupplierResponse;
+import com.example.prm_center_kitchen_management.model.response.DashboardWasteResponse;
+import com.example.prm_center_kitchen_management.model.response.DashboardFulfillmentResponse;
+import com.example.prm_center_kitchen_management.model.response.DashboardInventorySummaryResponse;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -77,5 +81,28 @@ public interface ApiService {
             @Query("sortBy") String sortBy,
             @Query("sortOrder") String sortOrder,
             @Query("search") String search);
+
+
+    // Manager
+
+    @GET("orders/analytics/fulfillment-rate")
+    Call<DashboardFulfillmentResponse> getDashboardFulfillment();
+
+    @GET("inventory/analytics/summary")
+    Call<DashboardInventorySummaryResponse> getDashboardInventorySummary();
+
+    @GET("inventory/analytics/waste")
+    Call<DashboardWasteResponse> getDashboardWaste(
+            @Query("fromDate") String fromDate,
+            @Query("toDate") String toDate
+    );
+
+    @GET("suppliers")
+    Call<DashboardSupplierResponse> getDashboardSuppliers(
+            @Query("page") int page,
+            @Query("limit") int limit,
+            @Query("sortOrder") String sortOrder,
+            @Query("isActive") boolean isActive
+    );
 
 }
