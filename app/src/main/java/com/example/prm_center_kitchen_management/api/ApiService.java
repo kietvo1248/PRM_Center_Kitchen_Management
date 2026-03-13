@@ -14,6 +14,10 @@ import com.example.prm_center_kitchen_management.model.response.DashboardSupplie
 import com.example.prm_center_kitchen_management.model.response.DashboardWasteResponse;
 import com.example.prm_center_kitchen_management.model.response.DashboardFulfillmentResponse;
 import com.example.prm_center_kitchen_management.model.response.DashboardInventorySummaryResponse;
+import com.example.prm_center_kitchen_management.model.response.StoreDetailResponse;
+import com.example.prm_center_kitchen_management.model.response.StoreResponse;
+import com.example.prm_center_kitchen_management.model.request.StoreRequest;
+
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -105,4 +109,26 @@ public interface ApiService {
             @Query("isActive") boolean isActive
     );
 
+    // manage Store
+
+    @GET("stores")
+    Call<StoreResponse> getStores(
+            @Query("page") int page,
+            @Query("limit") int limit,
+            @Query("sortOrder") String sortOrder,
+            @Query("search") String search,
+            @Query("isActive") Boolean isActive
+    );
+
+    @GET("stores/{id}")
+    Call<StoreDetailResponse> getStoreDetail(@Path("id") String id);
+
+    @POST("stores")
+    Call<ResponseBody> createStore(@Body StoreRequest request);
+
+    @PATCH("stores/{id}")
+    Call<ResponseBody> updateStore(@Path("id") String id, @Body StoreRequest request);
+
+    @DELETE("stores/{id}")
+    Call<ResponseBody> deleteStore(@Path("id") String id);
 }
