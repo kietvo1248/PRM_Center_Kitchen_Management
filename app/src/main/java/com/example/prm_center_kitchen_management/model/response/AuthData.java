@@ -19,5 +19,6 @@ public class AuthData {
     }
     public String getRole() { return role; }
     public String getAccessToken() { return accessToken; }
+    public String getRefreshToken() { return refreshToken; }
     public String getStoreId() { return storeId; }
 }

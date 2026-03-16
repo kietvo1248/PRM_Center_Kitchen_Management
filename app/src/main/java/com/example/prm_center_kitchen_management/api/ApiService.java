@@ -1,6 +1,8 @@
 package com.example.prm_center_kitchen_management.api;
 
 import com.example.prm_center_kitchen_management.model.request.LoginRequest;
+import com.example.prm_center_kitchen_management.model.request.RefreshTokenRequest;
+import com.example.prm_center_kitchen_management.model.response.RefreshTokenResponse;
 import com.example.prm_center_kitchen_management.model.request.ProfileUpdateRequest;
 import com.example.prm_center_kitchen_management.model.response.LoginResponse;
 import com.example.prm_center_kitchen_management.model.response.UserProfileResponse;
@@ -36,6 +38,9 @@ public interface ApiService {
     // Auth & General
     @POST("auth/login")
     Call<LoginResponse> login(@Body LoginRequest request);
+
+    @POST("auth/refresh-token")
+    Call<RefreshTokenResponse> refreshToken(@Body RefreshTokenRequest request);
 
     @GET("auth/me")
     Call<UserProfileResponse> getProfile();

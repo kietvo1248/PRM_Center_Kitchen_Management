@@ -13,6 +13,7 @@ import com.example.prm_center_kitchen_management.api.ApiClient;
 import com.example.prm_center_kitchen_management.api.ApiService;
 import com.example.prm_center_kitchen_management.model.request.LoginRequest;
 import com.example.prm_center_kitchen_management.model.response.LoginResponse;
+import com.example.prm_center_kitchen_management.model.response.AuthData;
 import com.example.prm_center_kitchen_management.utils.SessionManager;
 import com.example.prm_center_kitchen_management.activity.base.BaseActivity;
 
@@ -32,6 +33,7 @@ public class LoginActivity extends BaseActivity {
     private EditText edtEmail, edtPassword;
     private Button btnLogin;
     private SessionManager sessionManager;
+    private AuthData authData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,12 +74,15 @@ public class LoginActivity extends BaseActivity {
 
                     if (loginResponse.getStatusCode() == 201 || loginResponse.getStatusCode() == 200) {
                         // Lưu Token
+                        authData = loginResponse.getData();
                         String role = loginResponse.getData().getRole();
                         sessionManager.saveAuthData(
                                 loginResponse.getData().getAccessToken(),
                                 role,
                                 loginResponse.getData().getStoreId()
                         );
+                        sessionManager.saveAuthToken(authData.getAccessToken());
+                        sessionManager.saveRefreshToken(authData.getRefreshToken());
 
                         Toast.makeText(LoginActivity.this, "Đăng nhập thành công!", Toast.LENGTH_SHORT).show();
                         routeToRoleActivity(role); // Điều hướng
