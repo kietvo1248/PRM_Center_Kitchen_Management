@@ -17,6 +17,9 @@ import com.example.prm_center_kitchen_management.model.response.DashboardInvento
 import com.example.prm_center_kitchen_management.model.response.StoreDetailResponse;
 import com.example.prm_center_kitchen_management.model.response.StoreResponse;
 import com.example.prm_center_kitchen_management.model.request.StoreRequest;
+import com.example.prm_center_kitchen_management.model.request.SupplierRequest;
+import com.example.prm_center_kitchen_management.model.response.SupplierListResponse;
+import com.example.prm_center_kitchen_management.model.response.SupplierDetailResponse;
 
 
 import okhttp3.ResponseBody;
@@ -131,4 +134,23 @@ public interface ApiService {
 
     @DELETE("stores/{id}")
     Call<ResponseBody> deleteStore(@Path("id") String id);
+
+    // manage Supplier
+    @GET("suppliers")
+    Call<SupplierListResponse> getSuppliers(
+            @Query("page") int page,
+            @Query("limit") int limit,
+            @Query("sortOrder") String sortOrder,
+            @Query("search") String search,
+            @Query("isActive") Boolean isActive
+    );
+
+    @GET("suppliers/{id}")
+    Call<SupplierDetailResponse> getSupplierDetail(@Path("id") int id);
+
+    @POST("suppliers")
+    Call<SupplierDetailResponse> createSupplier(@Body SupplierRequest request);
+
+    @PATCH("suppliers/{id}")
+    Call<SupplierDetailResponse> updateSupplier(@Path("id") int id, @Body SupplierRequest request);
 }

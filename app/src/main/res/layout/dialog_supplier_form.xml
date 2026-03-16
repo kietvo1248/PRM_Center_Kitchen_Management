@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="24dp">
+
+    <TextView android:id="@+id/tvFormTitle" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Tạo Nhà Cung Cấp" android:textSize="20sp" android:textStyle="bold" android:layout_marginBottom="16dp"/>
+
+    <EditText android:id="@+id/etName" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="Tên nhà cung cấp *" android:layout_marginBottom="8dp"/>
+    <EditText android:id="@+id/etContactName" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="Người liên hệ *" android:layout_marginBottom="8dp"/>
+    <EditText android:id="@+id/etPhone" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="Số điện thoại *" android:inputType="phone" android:layout_marginBottom="8dp"/>
+    <EditText android:id="@+id/etAddress" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="Địa chỉ *" android:layout_marginBottom="8dp"/>
+    <CheckBox android:id="@+id/cbIsActive" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Đang hoạt động" android:checked="true" android:layout_marginBottom="16dp"/>
+
+    <Button android:id="@+id/btnSaveSupplier" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="LƯU"/>
+</LinearLayout>

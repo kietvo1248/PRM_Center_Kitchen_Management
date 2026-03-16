@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="24dp">
+
+    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Chi tiết Nhà Cung Cấp" android:textSize="20sp" android:textStyle="bold" android:layout_marginBottom="16dp"/>
+
+    <TextView android:id="@+id/tvDetName" android:layout_width="match_parent" android:layout_height="wrap_content" android:textSize="18sp" android:textColor="#000" android:layout_marginBottom="8dp"/>
+    <TextView android:id="@+id/tvDetContact" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="8dp"/>
+    <TextView android:id="@+id/tvDetPhone" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="8dp"/>
+    <TextView android:id="@+id/tvDetAddress" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="8dp"/>
+    <TextView android:id="@+id/tvDetStatus" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="16dp" android:textStyle="bold"/>
+
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal">
+        <Button android:id="@+id/btnEditSupplier" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="CẬP NHẬT" android:layout_marginEnd="8dp"/>
+        <Button android:id="@+id/btnCloseDetail" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="ĐÓNG" android:backgroundTint="#888"/>
+    </LinearLayout>
+</LinearLayout>
