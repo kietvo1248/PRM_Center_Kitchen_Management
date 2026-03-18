@@ -22,6 +22,10 @@ import com.example.prm_center_kitchen_management.model.request.StoreRequest;
 import com.example.prm_center_kitchen_management.model.request.SupplierRequest;
 import com.example.prm_center_kitchen_management.model.response.SupplierListResponse;
 import com.example.prm_center_kitchen_management.model.response.SupplierDetailResponse;
+import com.example.prm_center_kitchen_management.model.request.ProductRequest;
+import com.example.prm_center_kitchen_management.model.response.ProductListResponse;
+import com.example.prm_center_kitchen_management.model.response.ProductDetailResponse;
+import com.example.prm_center_kitchen_management.model.response.BaseUnitListResponse;
 
 
 import okhttp3.ResponseBody;
@@ -158,4 +162,30 @@ public interface ApiService {
 
     @PATCH("suppliers/{id}")
     Call<SupplierDetailResponse> updateSupplier(@Path("id") int id, @Body SupplierRequest request);
+
+
+    // manage product
+    @GET("products")
+    Call<ProductListResponse> getProducts(
+            @Query("page") int page,
+            @Query("limit") int limit,
+            @Query("search") String search,
+            @Query("sortOrder") String sortOrder
+    );
+
+    @GET("products/{id}")
+    Call<ProductDetailResponse> getProductDetail(@Path("id") int id);
+
+    @POST("products")
+    Call<ProductDetailResponse> createProduct(@Body ProductRequest request);
+
+    @PATCH("products/{id}")
+    Call<ProductDetailResponse> updateProduct(@Path("id") int id, @Body ProductRequest request);
+
+    @GET("base-units")
+    Call<BaseUnitListResponse> getBaseUnits(
+            @Query("page") int page,
+            @Query("limit") int limit
+    );
+
 }

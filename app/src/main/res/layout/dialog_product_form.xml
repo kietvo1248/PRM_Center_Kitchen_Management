@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="24dp">
+
+    <TextView android:id="@+id/tvFormTitle" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Tạo Sản Phẩm" android:textSize="20sp" android:textStyle="bold" android:layout_marginBottom="16dp"/>
+
+    <EditText android:id="@+id/etName" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="Tên sản phẩm *" android:layout_marginBottom="8dp"/>
+
+    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Đơn vị tính:" android:textStyle="bold"/>
+    <Spinner android:id="@+id/spBaseUnit" android:layout_width="match_parent" android:layout_height="48dp" android:layout_marginBottom="8dp"/>
+
+    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="HSD (Ngày):" android:textStyle="bold"/>
+
+    <EditText android:id="@+id/etShelfLife" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="Hạn sử dụng (ngày) *" android:inputType="number" android:layout_marginBottom="16dp"/>
+
+    <Button android:id="@+id/btnSaveProduct" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="LƯU"/>
+</LinearLayout>

@@ -9,6 +9,9 @@
         android:id="@+id/nav_manager_store"
         android:icon="@android:drawable/ic_menu_directions"
         android:title="Cửa hàng" />
+    <item android:id="@+id/nav_product_management"
+        android:icon="@android:drawable/ic_menu_agenda"
+        android:title="Sản phẩm" />
     <item
         android:id="@+id/nav_supplier_management"
         android:icon="@android:drawable/ic_menu_agenda"

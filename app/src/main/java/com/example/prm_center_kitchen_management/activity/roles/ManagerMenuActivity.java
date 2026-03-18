@@ -8,6 +8,7 @@ import com.example.prm_center_kitchen_management.activity.base.BaseNavigationAct
 import com.example.prm_center_kitchen_management.fragment.roles.Manager.ManagerDashboardFragment;
 import com.example.prm_center_kitchen_management.fragment.roles.Manager.StoreManagementFragment;
 import com.example.prm_center_kitchen_management.fragment.roles.Manager.SupplierManagementFragment;
+import com.example.prm_center_kitchen_management.fragment.roles.Manager.ProductManagerFragment;
 import com.example.prm_center_kitchen_management.fragment.share.ProfileFragment;
 
 public class ManagerMenuActivity extends BaseNavigationActivity {
@@ -35,7 +36,10 @@ public class ManagerMenuActivity extends BaseNavigationActivity {
 
             }else if (itemId == R.id.nav_supplier_management) {
                 selectedFragment = new SupplierManagementFragment();
+            }else if(itemId == R.id.nav_product_management){
+                selectedFragment = new ProductManagerFragment();
             }
+
             else if (itemId == R.id.nav_profile) {
                 // Gọi Fragment Cá nhân dùng chung
                 selectedFragment = new ProfileFragment();
