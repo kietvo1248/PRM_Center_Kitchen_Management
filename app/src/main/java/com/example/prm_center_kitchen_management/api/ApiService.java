@@ -2,6 +2,12 @@ package com.example.prm_center_kitchen_management.api;
 
 import com.example.prm_center_kitchen_management.model.request.LoginRequest;
 import com.example.prm_center_kitchen_management.model.request.RefreshTokenRequest;
+import com.example.prm_center_kitchen_management.model.response.CoordinatorOrderResponse;
+import com.example.prm_center_kitchen_management.model.response.CoordinatorOrderReviewResponse;
+import com.example.prm_center_kitchen_management.model.response.CoordinatorPickingListResponse;
+import com.example.prm_center_kitchen_management.model.response.CoordinatorShipmentResponse;
+import com.example.prm_center_kitchen_management.model.response.OrderReviewResponse;
+import com.example.prm_center_kitchen_management.model.response.PickingListResponse;
 import com.example.prm_center_kitchen_management.model.response.RefreshTokenResponse;
 import com.example.prm_center_kitchen_management.model.request.ProfileUpdateRequest;
 import com.example.prm_center_kitchen_management.model.response.LoginResponse;
@@ -27,6 +33,8 @@ import com.example.prm_center_kitchen_management.model.response.ProductListRespo
 import com.example.prm_center_kitchen_management.model.response.ProductDetailResponse;
 import com.example.prm_center_kitchen_management.model.response.BaseUnitListResponse;
 
+
+import java.util.Map;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -188,4 +196,29 @@ public interface ApiService {
             @Query("limit") int limit
     );
 
+        // Lấy danh sách đơn hàng cho Coordinator
+        @GET("orders")
+        Call<CoordinatorOrderResponse> getCoordinatorOrders(
+                @Query("page") int page,
+                @Query("limit") int limit,
+                @Query("sortOrder") String sortOrder
+        );
+
+    @GET("orders/coordinator/{id}/review")
+    Call<CoordinatorOrderReviewResponse> getCoordinatorOrderReview(@Path("id") String orderId);
+
+    @PATCH("orders/coordinator/{id}/approve")
+    Call<Void> approveCoordinatorOrder(@Path("id") String orderId, @Body java.util.Map<String, Boolean> body);
+
+    @PATCH("orders/coordinator/{id}/reject")
+    Call<Void> rejectCoordinatorOrder(@Path("id") String orderId, @Body java.util.Map<String, String> body);
+    @GET("shipments")
+    Call<CoordinatorShipmentResponse> getCoordinatorShipments(
+            @Query("page") int page,
+            @Query("limit") int limit,
+            @Query("sortOrder") String sortOrder
+    );
+
+    @GET("shipments/{id}/picking-list")
+    Call<CoordinatorPickingListResponse> getCoordinatorPickingList(@Path("id") String shipmentId);
 }

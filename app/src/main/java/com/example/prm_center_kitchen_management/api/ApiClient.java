@@ -21,7 +21,7 @@ import okhttp3.Authenticator;
 
 
 public class ApiClient {
-    private static final String BASE_URL = "https://wdp301-api.onrender.com/wdp301-api/v1/";
+    private static final String BASE_URL = "https://wdp301-api.vercel.app/wdp301-api/v1/";
     private static Retrofit retrofit = null;
 
     // Thêm Context vào tham số để lấy SharedPreferences

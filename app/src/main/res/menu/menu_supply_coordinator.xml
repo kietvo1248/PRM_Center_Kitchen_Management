@@ -2,11 +2,18 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/nav_supply_coordinator_dashboard"
-        android:icon="@android:drawable/ic_menu_sort_by_size"
+        android:icon="@android:drawable/ic_menu_today"
         android:title="Tổng quan" />
-
+    <item
+        android:id="@+id/nav_coordinator_orders"
+        android:icon="@android:drawable/ic_menu_agenda"
+        android:title="Đơn hàng" />
+    <item
+        android:id="@+id/nav_coordinator_shipments"
+        android:icon="@android:drawable/ic_dialog_map"
+        android:title="Vận đơn" />
     <item
         android:id="@+id/nav_profile"
-        android:icon="@android:drawable/ic_menu_myplaces"
+        android:icon="@android:drawable/ic_menu_view"
         android:title="Cá nhân" />
 </menu>
