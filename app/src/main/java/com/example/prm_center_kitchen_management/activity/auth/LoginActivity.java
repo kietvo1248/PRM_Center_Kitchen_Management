@@ -69,29 +69,38 @@ public class LoginActivity extends BaseActivity {
         apiService.login(request).enqueue(new Callback<LoginResponse>() {
             @Override
             public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
+                android.util.Log.d("API_DEBUG", "HTTP Code: " + response.code());
+
                 if (response.isSuccessful() && response.body() != null) {
                     LoginResponse loginResponse = response.body();
+                    int internalCode = loginResponse.getStatusCode();
+                    android.util.Log.d("API_DEBUG", "JSON Status Code: " + internalCode);
 
-                    if (loginResponse.getStatusCode() == 201 || loginResponse.getStatusCode() == 200) {
-                        // Lưu Token
+                    if (internalCode == 201 || internalCode == 200) {
+                        // --- ĐĂNG NHẬP THÀNH CÔNG ---
                         authData = loginResponse.getData();
-                        String role = loginResponse.getData().getRole();
-                        sessionManager.saveAuthData(
-                                loginResponse.getData().getAccessToken(),
-                                role,
-                                loginResponse.getData().getStoreId()
-                        );
+                        String role = authData.getRole();
+
+                        sessionManager.saveAuthData(authData.getAccessToken(), role, authData.getStoreId());
                         sessionManager.saveAuthToken(authData.getAccessToken());
                         sessionManager.saveRefreshToken(authData.getRefreshToken());
 
                         Toast.makeText(LoginActivity.this, "Đăng nhập thành công!", Toast.LENGTH_SHORT).show();
-                        routeToRoleActivity(role); // Điều hướng
+                        routeToRoleActivity(role);
+                    } else {
+                        // --- THÀNH CÔNG HTTP NHƯNG LỖI LOGIC (Ví dụ: 400 trong JSON) ---
+                        android.util.Log.e("API_DEBUG", "Logic Error: " + loginResponse.getMessage());
+                        Toast.makeText(LoginActivity.this, "Lỗi: " + loginResponse.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 } else {
-                    Toast.makeText(LoginActivity.this, "Sai thông tin đăng nhập!", Toast.LENGTH_SHORT).show();
+                    // --- LỖI HTTP (401 Unauthorized, 404 Not Found, 500 Server Error) ---
+                    String errorMsg = "Sai tài khoản hoặc mật khẩu!";
+                    if (response.code() == 500) errorMsg = "Lỗi server (500), vui lòng thử lại sau";
+
+                    android.util.Log.e("API_DEBUG", "HTTP Error: " + response.code());
+                    Toast.makeText(LoginActivity.this, errorMsg, Toast.LENGTH_SHORT).show();
                 }
             }
-
             @Override
             public void onFailure(Call<LoginResponse> call, Throwable t) {
                 Toast.makeText(LoginActivity.this, "Lỗi kết nối mạng: " + t.getMessage(), Toast.LENGTH_SHORT).show();

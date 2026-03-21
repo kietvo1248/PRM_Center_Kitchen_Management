@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="20dp">
+
+    <TextView
+        android:id="@+id/tvDialogTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:textSize="18sp"
+        android:layout_marginBottom="12dp" />
+
+    <LinearLayout
+        android:id="@+id/llOrderItems"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" />
+
+    <EditText
+        android:id="@+id/edtRejectReason"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Lý do từ chối"
+        android:visibility="gone" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="16dp">
+
+        <Button android:id="@+id/btnReject" android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content" android:text="REJECT" android:backgroundTint="#D32F2F" android:layout_marginEnd="8dp"/>
+        <Button android:id="@+id/btnApprove" android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content" android:text="APPROVE" android:backgroundTint="#388E3C"/>
+    </LinearLayout>
+</LinearLayout>
