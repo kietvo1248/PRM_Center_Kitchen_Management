@@ -1,4 +1,4 @@
-package com.example.prm_center_kitchen_management.adapter;
+package com.example.prm_center_kitchen_management.adapter.roles.KitchenStaff;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -6,7 +6,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
-import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.prm_center_kitchen_management.R;
 import com.example.prm_center_kitchen_management.model.response.Receipt;

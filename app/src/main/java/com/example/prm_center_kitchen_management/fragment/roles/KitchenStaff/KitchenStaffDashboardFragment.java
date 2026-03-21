@@ -1,6 +1,7 @@
 package com.example.prm_center_kitchen_management.fragment.roles.KitchenStaff;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,7 +13,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.prm_center_kitchen_management.R;
-import com.example.prm_center_kitchen_management.adapter.WasteReportAdapter;
+import com.example.prm_center_kitchen_management.adapter.roles.KitchenStaff.WasteReportAdapter;
 import com.example.prm_center_kitchen_management.api.ApiClient;
 import com.example.prm_center_kitchen_management.api.ApiService;
 import com.example.prm_center_kitchen_management.model.response.ApiResponse;
@@ -40,11 +41,12 @@ public class KitchenStaffDashboardFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_kitchen_staff_dashboard, container, false);
         initViews(view);
-        apiService = ApiClient.getClient(getContext()).create(ApiService.class);
-        
+        // Dùng requireContext() an toàn hơn getContext()
+        apiService = ApiClient.getClient(requireContext()).create(ApiService.class);
+
         loadStats();
         loadWasteReports();
-        
+
         return view;
     }
 
@@ -69,21 +71,25 @@ public class KitchenStaffDashboardFragment extends Fragment {
                         tvPendingTasks.setText(String.valueOf(summary.getTotalPendingTasks()));
                         tvLowStock.setText(String.valueOf(summary.getLowStockItems()));
                         tvNearExpiry.setText(String.valueOf(summary.getNearExpiryBatches()));
+                    } else {
+                        Toast.makeText(getContext(), "Cấu trúc API thống kê không khớp (Data Null)", Toast.LENGTH_SHORT).show();
                     }
+                } else {
+                    Toast.makeText(getContext(), "Lỗi tải thống kê: " + response.code(), Toast.LENGTH_SHORT).show();
+                    Log.e("API_ERROR", "Thống kê lỗi: " + response.code());
                 }
             }
 
             @Override
             public void onFailure(Call<ApiResponse<InventorySummary>> call, Throwable t) {
                 if (isAdded()) {
-                    Toast.makeText(getContext(), "Failed to load summary", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "Mất kết nối: " + t.getMessage(), Toast.LENGTH_SHORT).show();
                 }
             }
         });
     }
 
     private void loadWasteReports() {
-        // Lấy báo cáo trong 7 ngày gần nhất
         Calendar cal = Calendar.getInstance();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
         String toDate = sdf.format(cal.getTime());
@@ -94,15 +100,22 @@ public class KitchenStaffDashboardFragment extends Fragment {
             @Override
             public void onResponse(Call<ApiResponse<List<WasteReport>>> call, Response<ApiResponse<List<WasteReport>>> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    wasteReports = response.body().getData();
-                    adapter.updateData(wasteReports);
+                    List<WasteReport> newReports = response.body().getData();
+                    if (newReports != null) {
+                        wasteReports = newReports;
+                        adapter.updateData(wasteReports);
+                    } else {
+                        Toast.makeText(getContext(), "Cấu trúc API Báo cáo không khớp (Data Null)", Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    Toast.makeText(getContext(), "Lỗi tải báo cáo Waste: " + response.code(), Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<ApiResponse<List<WasteReport>>> call, Throwable t) {
                 if (isAdded()) {
-                    Toast.makeText(getContext(), "Failed to load waste reports", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "Lỗi kết nối Waste Report", Toast.LENGTH_SHORT).show();
                 }
             }
         });

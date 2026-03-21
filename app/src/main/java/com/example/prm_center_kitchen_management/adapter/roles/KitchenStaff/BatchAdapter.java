@@ -1,4 +1,4 @@
-package com.example.prm_center_kitchen_management.adapter;
+package com.example.prm_center_kitchen_management.adapter.roles.KitchenStaff;
 
 import android.graphics.Color;
 import android.view.LayoutInflater;

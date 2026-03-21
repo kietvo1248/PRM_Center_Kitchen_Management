@@ -16,7 +16,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.prm_center_kitchen_management.R;
-import com.example.prm_center_kitchen_management.adapter.PickingItemAdapter;
+import com.example.prm_center_kitchen_management.adapter.roles.KitchenStaff.PickingItemAdapter;
 import com.example.prm_center_kitchen_management.api.ApiClient;
 import com.example.prm_center_kitchen_management.api.ApiService;
 import com.example.prm_center_kitchen_management.model.request.FinalizeBulkRequest;

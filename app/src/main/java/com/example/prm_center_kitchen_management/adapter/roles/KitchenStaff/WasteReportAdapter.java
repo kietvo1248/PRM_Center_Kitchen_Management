@@ -1,4 +1,4 @@
-package com.example.prm_center_kitchen_management.adapter;
+package com.example.prm_center_kitchen_management.adapter.roles.KitchenStaff;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -39,7 +39,14 @@ public class WasteReportAdapter extends RecyclerView.Adapter<WasteReportAdapter.
     }
 
     public void updateData(List<WasteReport> newList) {
-        this.reportList = newList;
+        if (this.reportList != null) {
+            this.reportList.clear();
+            if (newList != null) {
+                this.reportList.addAll(newList);
+            }
+        } else {
+            this.reportList = newList;
+        }
         notifyDataSetChanged();
     }
 

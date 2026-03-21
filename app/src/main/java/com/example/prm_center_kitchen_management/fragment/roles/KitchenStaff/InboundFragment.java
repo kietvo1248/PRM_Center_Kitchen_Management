@@ -18,7 +18,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.example.prm_center_kitchen_management.R;
-import com.example.prm_center_kitchen_management.adapter.InboundReceiptAdapter;
+import com.example.prm_center_kitchen_management.adapter.roles.KitchenStaff.InboundReceiptAdapter;
 import com.example.prm_center_kitchen_management.api.ApiClient;
 import com.example.prm_center_kitchen_management.api.ApiService;
 import com.example.prm_center_kitchen_management.model.request.AddReceiptItemRequest;
