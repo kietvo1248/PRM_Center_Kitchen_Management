@@ -7,109 +7,142 @@ import com.example.prm_center_kitchen_management.model.request.RefreshTokenReque
 import com.example.prm_center_kitchen_management.model.response.RefreshTokenResponse;
 import com.example.prm_center_kitchen_management.utils.SessionManager;
 import java.io.IOException;
+import okhttp3.Authenticator;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
-import java.util.concurrent.TimeUnit;
 import okhttp3.Request;
 import okhttp3.Response;
 import okhttp3.Route;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
-import java.io.IOException;
-
-import okhttp3.Authenticator;
-
+import java.util.concurrent.TimeUnit;
 
 public class ApiClient {
     private static final String BASE_URL = "https://wdp301-api.vercel.app/wdp301-api/v1/";
-    private static Retrofit retrofit = null;
+    private static volatile Retrofit retrofit = null;
+    private static volatile ApiService refreshService = null;
+    private static final Object LOCK = new Object();
 
-    // Thêm Context vào tham số để lấy SharedPreferences
     public static Retrofit getClient(Context context) {
         if (retrofit == null) {
-            SessionManager sessionManager = new SessionManager(context);
-
-            // Middleware chặn lại mọi Request trước khi gửi đi
-            Interceptor authInterceptor = new Interceptor() {
-                @Override
-                public Response intercept(Chain chain) throws IOException {
-                    Request.Builder requestBuilder = chain.request().newBuilder();
-
-                    // Lấy token từ Session và nhét vào Header
-                    String token = sessionManager.getToken();
-                    if (token != null && !token.isEmpty()) {
-                        requestBuilder.addHeader("Authorization", "Bearer " + token);
-                    }
-
-                    return chain.proceed(requestBuilder.build());
+            synchronized (LOCK) {
+                if (retrofit == null) {
+                    retrofit = createRetrofit(context.getApplicationContext());
                 }
-            };
+            }
+        }
+        return retrofit;
+    }
 
-            // 2. Authenticator để bắt lỗi 401 và tự động gọi API Refresh Token
-            Authenticator tokenAuthenticator = new Authenticator() {
-                @Override
-                public Request authenticate(Route route, Response response) throws IOException {
-                    // Nếu chính API refresh-token bị lỗi 401 -> Tránh vòng lặp vô hạn
-                    if (response.request().url().encodedPath().contains("refresh-token")) {
-                        return null;
-                    }
+    private static Retrofit createRetrofit(Context context) {
+        SessionManager sessionManager = new SessionManager(context);
 
-                    String refreshToken = sessionManager.getRefreshToken();
-                    if (refreshToken == null || refreshToken.isEmpty()) {
-                        return null; // Không có refresh token, chịu thua
-                    }
+        Interceptor authInterceptor = chain -> {
+            String token = sessionManager.getToken();
+            Request.Builder builder = chain.request().newBuilder();
+            if (token != null && !token.isEmpty()) {
+                builder.header("Authorization", "Bearer " + token);
+            }
+            return chain.proceed(builder.build());
+        };
 
-                    // TẠO RETROFIT MỚI ĐỂ GỌI ĐỒNG BỘ (SYNC) API REFRESH
-                    ApiService apiService = new Retrofit.Builder()
+        Authenticator authenticator = (route, response) -> {
+            // Limit retries to avoid infinite loops
+            if (responseCount(response) >= 2) return null;
+            
+            // Do not attempt to refresh if the refresh token call itself failed
+            if (response.request().url().encodedPath().contains("auth/refresh-token")) {
+                return null;
+            }
+
+            synchronized (LOCK) {
+                String latestToken = sessionManager.getToken();
+                String requestToken = response.request().header("Authorization");
+                if (requestToken != null && requestToken.startsWith("Bearer ")) {
+                    requestToken = requestToken.substring(7);
+                }
+
+                // If token was already updated by another concurrent thread, retry with the new one
+                if (latestToken != null && !latestToken.equals(requestToken)) {
+                    return response.request().newBuilder()
+                            .header("Authorization", "Bearer " + latestToken)
+                            .build();
+                }
+
+                String refreshToken = sessionManager.getRefreshToken();
+                if (refreshToken == null || refreshToken.isEmpty()) {
+                    logout(context, sessionManager);
+                    return null;
+                }
+
+                // Lazy init refresh service to avoid multiple Retrofit instances
+                if (refreshService == null) {
+                    refreshService = new Retrofit.Builder()
                             .baseUrl(BASE_URL)
                             .addConverterFactory(GsonConverterFactory.create())
                             .build()
                             .create(ApiService.class);
+                }
 
-                    retrofit2.Response<RefreshTokenResponse> refreshResponse =
-                            apiService.refreshToken(new RefreshTokenRequest(refreshToken)).execute();
+                try {
+                    // Synchronous refresh call
+                    retrofit2.Response<RefreshTokenResponse> res = 
+                        refreshService.refreshToken(new RefreshTokenRequest(refreshToken)).execute();
 
-                    if (refreshResponse.isSuccessful() && refreshResponse.body() != null && refreshResponse.body().getData() != null) {
-                        // Lấy Token mới thành công
-                        String newAccessToken = refreshResponse.body().getData().getAccessToken();
-                        String newRefreshToken = refreshResponse.body().getData().getRefreshToken();
-
-                        // Cập nhật vào Session
-                        sessionManager.saveAuthToken(newAccessToken);
-                        sessionManager.saveRefreshToken(newRefreshToken);
-
-                        // GẮN TOKEN MỚI VÀ TIẾP TỤC CHẠY LẠI API BỊ LỖI LÚC NÃY
+                    if (res.isSuccessful() && res.body() != null && res.body().getData() != null) {
+                        String newToken = res.body().getData().getAccessToken();
+                        String newRefresh = res.body().getData().getRefreshToken();
+                        
+                        // Update storage
+                        sessionManager.saveAuthToken(newToken);
+                        sessionManager.saveRefreshToken(newRefresh);
+                        
+                        // Retry the original request with the new token
                         return response.request().newBuilder()
-                                .header("Authorization", "Bearer " + newAccessToken)
+                                .header("Authorization", "Bearer " + newToken)
                                 .build();
                     } else {
-                        // Refresh Token cũng hết hạn hoặc lỗi -> Xóa session và văng ra màn hình Login
-                        sessionManager.logout();
-
-                        // Chuyển về màn hình đăng nhập (tuỳ chọn)
-                        Intent intent = new Intent(context, LoginActivity.class);
-                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                        context.startActivity(intent);
-
+                        // Refresh failed (e.g., refresh token expired)
+                        logout(context, sessionManager);
                         return null;
                     }
+                } catch (IOException e) {
+                    // Network error during refresh
+                    return null;
                 }
-            };
+            }
+        };
 
-            // Gắn Middleware vào Http Client
-            OkHttpClient client = new OkHttpClient.Builder()
-                    .addInterceptor(authInterceptor)
-//                    .connectTimeout(30, TimeUnit.SECONDS)
-//                    .readTimeout(30, TimeUnit.SECONDS)
-//                    .writeTimeout(30, TimeUnit.SECONDS)
-                    .build();
+        OkHttpClient client = new OkHttpClient.Builder()
+                .addInterceptor(authInterceptor)
+                .authenticator(authenticator)
+                .connectTimeout(30, TimeUnit.SECONDS)
+                .readTimeout(30, TimeUnit.SECONDS)
+                .writeTimeout(30, TimeUnit.SECONDS)
+                .build();
 
-            retrofit = new Retrofit.Builder()
-                    .baseUrl(BASE_URL)
-                    .client(client) // Sử dụng client đã gắn Interceptor
-                    .addConverterFactory(GsonConverterFactory.create())
-                    .build();
+        return new Retrofit.Builder()
+                .baseUrl(BASE_URL)
+                .client(client)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+    }
+
+    private static int responseCount(Response response) {
+        int result = 1;
+        while ((response = response.priorResponse()) != null) result++;
+        return result;
+    }
+
+    private static synchronized void logout(Context context, SessionManager sessionManager) {
+        // Only trigger logout if we haven't already cleared the session
+        if (sessionManager.getToken() == null && sessionManager.getRefreshToken() == null) {
+            return;
         }
-        return retrofit;
+
+        sessionManager.logout();
+        Intent intent = new Intent(context, LoginActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        context.startActivity(intent);
     }
 }
