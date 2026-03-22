@@ -9,16 +9,9 @@ public class AddReceiptItemRequest {
     @SerializedName("quantity")
     private double quantity;
 
-    @SerializedName("mfgDate")
-    private String mfgDate;
 
-    @SerializedName("expDate")
-    private String expDate;
-
-    public AddReceiptItemRequest(int productId, double quantity, String mfgDate, String expDate) {
+    public AddReceiptItemRequest(int productId, double quantity) {
         this.productId = productId;
         this.quantity = quantity;
-        this.mfgDate = mfgDate;
-        this.expDate = expDate;
     }
 }

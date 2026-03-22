@@ -19,6 +19,7 @@ import com.example.prm_center_kitchen_management.api.ApiService;
 import com.example.prm_center_kitchen_management.model.response.ApiResponse;
 import com.example.prm_center_kitchen_management.model.response.InventorySummary;
 import com.example.prm_center_kitchen_management.model.response.WasteReport;
+import com.example.prm_center_kitchen_management.model.response.WasteAnalyticsData;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -96,16 +97,19 @@ public class KitchenStaffDashboardFragment extends Fragment {
         cal.add(Calendar.DAY_OF_YEAR, -7);
         String fromDate = sdf.format(cal.getTime());
 
-        apiService.getExpiryAlerts(fromDate, toDate).enqueue(new Callback<ApiResponse<List<WasteReport>>>() {
+        apiService.getExpiryAlerts(fromDate, toDate).enqueue(new Callback<ApiResponse<WasteAnalyticsData>>() {
             @Override
-            public void onResponse(Call<ApiResponse<List<WasteReport>>> call, Response<ApiResponse<List<WasteReport>>> response) {
+            public void onResponse(Call<ApiResponse<WasteAnalyticsData>> call, Response<ApiResponse<WasteAnalyticsData>> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    List<WasteReport> newReports = response.body().getData();
-                    if (newReports != null) {
-                        wasteReports = newReports;
+                    // Lấy object data bọc bên ngoài
+                    WasteAnalyticsData analyticsData = response.body().getData();
+
+                    if (analyticsData != null && analyticsData.getDetails() != null) {
+                        // Lấy mảng mảng chi tiết gán vào Adapter
+                        wasteReports = analyticsData.getDetails();
                         adapter.updateData(wasteReports);
                     } else {
-                        Toast.makeText(getContext(), "Cấu trúc API Báo cáo không khớp (Data Null)", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), "Không có chi tiết báo cáo", Toast.LENGTH_SHORT).show();
                     }
                 } else {
                     Toast.makeText(getContext(), "Lỗi tải báo cáo Waste: " + response.code(), Toast.LENGTH_SHORT).show();
@@ -113,9 +117,10 @@ public class KitchenStaffDashboardFragment extends Fragment {
             }
 
             @Override
-            public void onFailure(Call<ApiResponse<List<WasteReport>>> call, Throwable t) {
+            public void onFailure(Call<ApiResponse<WasteAnalyticsData>> call, Throwable t) {
                 if (isAdded()) {
-                    Toast.makeText(getContext(), "Lỗi kết nối Waste Report", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "Lỗi kết nối Waste Report: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                    Log.e("DASHBOARD_ERR", "Waste Report API Fail", t);
                 }
             }
         });

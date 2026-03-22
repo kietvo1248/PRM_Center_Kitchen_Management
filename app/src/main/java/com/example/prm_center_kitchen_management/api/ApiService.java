@@ -48,6 +48,7 @@ import com.example.prm_center_kitchen_management.model.response.ScanCheckRespons
 import com.example.prm_center_kitchen_management.model.request.FinalizeBulkRequest;
 import com.example.prm_center_kitchen_management.model.response.Shipment;
 import com.example.prm_center_kitchen_management.model.response.InventorySummary;
+import com.example.prm_center_kitchen_management.model.response.WasteAnalyticsData;
 import com.example.prm_center_kitchen_management.model.response.WasteReport;
 import com.example.prm_center_kitchen_management.model.response.PaginatedResponse;
 
@@ -120,7 +121,7 @@ public interface ApiService {
     Call<ApiResponse<InventorySummary>> getInventorySummary();
 
     @GET("inventory/analytics/waste")
-    Call<ApiResponse<List<WasteReport>>> getExpiryAlerts(
+    Call<ApiResponse<WasteAnalyticsData>> getExpiryAlerts(
             @Query("fromDate") String from,
             @Query("toDate") String to
     );

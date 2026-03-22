@@ -241,8 +241,6 @@ public class InboundFragment extends Fragment implements InboundReceiptAdapter.O
         View dialogView = getLayoutInflater().inflate(R.layout.dialog_add_batch, null);
         AutoCompleteTextView actvProduct = dialogView.findViewById(R.id.actvProduct);
         TextInputEditText etQuantity = dialogView.findViewById(R.id.etQuantity);
-        TextInputEditText etMfgDate = dialogView.findViewById(R.id.etMfgDate);
-        TextInputEditText etExpDate = dialogView.findViewById(R.id.etExpDate);
         MaterialButton btnSubmit = dialogView.findViewById(R.id.btnSubmit);
 
         String[] names = new String[productsCache.size()];
@@ -251,8 +249,6 @@ public class InboundFragment extends Fragment implements InboundReceiptAdapter.O
         }
         actvProduct.setAdapter(new ArrayAdapter<>(requireContext(), android.R.layout.simple_dropdown_item_1line, names));
 
-        setupDatePicker(etMfgDate);
-        setupDatePicker(etExpDate);
 
         AlertDialog dialog = new AlertDialog.Builder(requireContext())
                 .setView(dialogView)
@@ -285,11 +281,9 @@ public class InboundFragment extends Fragment implements InboundReceiptAdapter.O
                 return;
             }
 
-            String mfg = etMfgDate.getText() != null ? etMfgDate.getText().toString().trim() : "";
-            String exp = etExpDate.getText() != null ? etExpDate.getText().toString().trim() : "";
 
             setLoading(true);
-            AddReceiptItemRequest request = new AddReceiptItemRequest(productId, quantity, mfg, exp);
+            AddReceiptItemRequest request = new AddReceiptItemRequest(productId, quantity);
             apiService.addReceiptItem(receiptId, request).enqueue(new Callback<ApiResponse<AddReceiptItemResponse>>() {
                 @Override
                 public void onResponse(@NonNull Call<ApiResponse<AddReceiptItemResponse>> call, @NonNull Response<ApiResponse<AddReceiptItemResponse>> response) {
@@ -319,16 +313,7 @@ public class InboundFragment extends Fragment implements InboundReceiptAdapter.O
         dialog.show();
     }
 
-    private void setupDatePicker(TextInputEditText editText) {
-        editText.setOnClickListener(v -> {
-            Calendar calendar = Calendar.getInstance();
-            new DatePickerDialog(requireContext(), (view, year, month, dayOfMonth) -> {
-                calendar.set(year, month, dayOfMonth);
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
-                editText.setText(sdf.format(calendar.getTime()));
-            }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)).show();
-        });
-    }
+
 
     private void showBatchQrDialog(String batchCode, String warning, String receiptId) {
         String msg = "Mã lô (QR): " + batchCode;
