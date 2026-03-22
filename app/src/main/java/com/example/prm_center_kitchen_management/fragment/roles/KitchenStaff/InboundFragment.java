@@ -31,6 +31,8 @@ import com.example.prm_center_kitchen_management.model.response.Product;
 import com.example.prm_center_kitchen_management.model.response.ProductListResponse;
 import com.example.prm_center_kitchen_management.model.response.Supplier;
 import com.example.prm_center_kitchen_management.model.response.SupplierListResponse;
+import com.example.prm_center_kitchen_management.model.response.InboundDetailResponse;
+import com.example.prm_center_kitchen_management.adapter.roles.KitchenStaff.InboundDetailItemAdapter;
 import com.example.prm_center_kitchen_management.utils.ApiUiHelper;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -39,6 +41,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import android.widget.Button;
+import android.widget.TextView;
 import java.util.Locale;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -360,19 +364,87 @@ public class InboundFragment extends Fragment implements InboundReceiptAdapter.O
     public void onItemClick(InboundReceipt receipt) {
         if (receipt == null) return;
         String st = receipt.getStatus() != null ? receipt.getStatus() : "";
-        if (!"draft".equalsIgnoreCase(st)) {
-            Toast.makeText(getContext(), "Phiếu không ở trạng thái draft — không thêm dòng tại đây.", Toast.LENGTH_SHORT).show();
-            return;
+
+        // Tạo danh sách tùy chọn động dựa vào trạng thái phiếu
+        List<String> optionsList = new ArrayList<>();
+        optionsList.add("Xem chi tiết"); // Luôn có tùy chọn này
+
+        if ("draft".equalsIgnoreCase(st)) {
+            optionsList.add("Thêm dòng hàng");
+            optionsList.add("Hoàn tất nhập kho");
         }
+
+        String[] options = optionsList.toArray(new String[0]);
+
         new AlertDialog.Builder(requireContext())
                 .setTitle(receipt.getReceiptCode() != null ? receipt.getReceiptCode() : "Phiếu nhập")
-                .setItems(new CharSequence[]{"Thêm dòng hàng", "Hoàn tất nhập kho"}, (d, which) -> {
-                    if (which == 0) {
+                .setItems(options, (d, which) -> {
+                    String selected = options[which];
+
+                    if (selected.equals("Xem chi tiết")) {
+                        fetchAndShowReceiptDetail(receipt.getId());
+                    } else if (selected.equals("Thêm dòng hàng")) {
                         showAddItemDialog(receipt.getId());
-                    } else {
+                    } else if (selected.equals("Hoàn tất nhập kho")) {
                         completeReceipt(receipt.getId());
                     }
                 })
                 .show();
+    }
+
+    private void fetchAndShowReceiptDetail(String receiptId) {
+        setLoading(true);
+        apiService.getReceiptDetail(receiptId).enqueue(new Callback<ApiResponse<InboundDetailResponse>>() {
+            @Override
+            public void onResponse(@NonNull Call<ApiResponse<InboundDetailResponse>> call, @NonNull Response<ApiResponse<InboundDetailResponse>> response) {
+                setLoading(false);
+                if (response.isSuccessful() && response.body() != null && response.body().getData() != null) {
+                    showDetailDialog(response.body().getData());
+                } else {
+                    ApiUiHelper.toastHttpError(requireContext(), response);
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<ApiResponse<InboundDetailResponse>> call, @NonNull Throwable t) {
+                setLoading(false);
+                Toast.makeText(getContext(), "Lỗi mạng khi tải chi tiết", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void showDetailDialog(InboundDetailResponse detail) {
+        View view = getLayoutInflater().inflate(R.layout.dialog_inbound_detail, null);
+        AlertDialog dialog = new AlertDialog.Builder(requireContext())
+                .setView(view)
+                .create();
+
+        TextView tvSupplier = view.findViewById(R.id.tvDetailSupplier);
+        TextView tvNote = view.findViewById(R.id.tvDetailNote);
+        TextView tvStatus = view.findViewById(R.id.tvDetailStatus);
+        RecyclerView rvItems = view.findViewById(R.id.rvDetailItems);
+        Button btnClose = view.findViewById(R.id.btnCloseDetail);
+
+        if (detail.getSupplier() != null) {
+            tvSupplier.setText("Nhà CC: " + detail.getSupplier().getName() + " - " + detail.getSupplier().getPhone());
+        }
+        tvNote.setText("Ghi chú: " + (detail.getNote() != null ? detail.getNote() : "Không"));
+        tvStatus.setText("Trạng thái: " + ("completed".equalsIgnoreCase(detail.getStatus()) ? "Đã hoàn tất" : "Bản nháp"));
+
+        if ("completed".equalsIgnoreCase(detail.getStatus())) {
+            tvStatus.setTextColor(android.graphics.Color.parseColor("#388E3C"));
+        } else {
+            tvStatus.setTextColor(android.graphics.Color.parseColor("#F57C00"));
+        }
+
+        // Nạp danh sách sản phẩm
+        rvItems.setLayoutManager(new LinearLayoutManager(getContext()));
+        if (detail.getItems() != null && !detail.getItems().isEmpty()) {
+            InboundDetailItemAdapter adapter = new InboundDetailItemAdapter(detail.getItems());
+            rvItems.setAdapter(adapter);
+        }
+
+        btnClose.setOnClickListener(v -> dialog.dismiss());
+        dialog.show();
     }
 }

@@ -36,6 +36,7 @@ import com.example.prm_center_kitchen_management.model.response.BaseUnitListResp
 // Kitchen Models
 import com.example.prm_center_kitchen_management.model.response.ApiResponse;
 import com.example.prm_center_kitchen_management.model.response.InboundReceipt;
+import com.example.prm_center_kitchen_management.model.response.InboundDetailResponse;
 import com.example.prm_center_kitchen_management.model.response.AddReceiptItemResponse;
 import com.example.prm_center_kitchen_management.model.request.CreateReceiptRequest;
 import com.example.prm_center_kitchen_management.model.request.AddReceiptItemRequest;
@@ -88,6 +89,9 @@ public interface ApiService {
             @Query("limit") int limit,
             @Query("status") String status
     );
+
+    @GET("inbound/receipts/{id}") // Lấy chi tiết phiếu nhập
+    Call<ApiResponse<InboundDetailResponse>> getReceiptDetail(@Path("id") String receiptId);
 
     @POST("inbound/receipts")
     Call<ApiResponse<InboundReceipt>> createReceipt(@Body CreateReceiptRequest request);
