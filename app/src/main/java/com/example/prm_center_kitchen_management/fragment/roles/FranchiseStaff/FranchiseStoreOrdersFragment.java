@@ -174,47 +174,10 @@ public class FranchiseStoreOrdersFragment extends Fragment{
             dialog.dismiss();
         });
 
-        btnReceive.setOnClickListener(v -> {
-            confirmReceiveShipment(data.getId(), dialog);
-            dialog.dismiss();
-        });
-
 
         dialog.show();
     }
 
-    private void confirmReceiveShipment(String orderId, Dialog dialog) {
-        if (getActivity() instanceof BaseActivity)
-            ((BaseActivity) getActivity()).showLoading("Đang nhận hàng...");
-        apiService.receiveAllShipment(orderId).enqueue(new Callback<ResponseBody>() {
-            @Override
-            public void onResponse(@NonNull Call<ResponseBody> call, @NonNull Response<ResponseBody> response) {
-                if (getActivity() instanceof BaseActivity)
-                    ((BaseActivity) getActivity()).hideLoading();
-                if (response.isSuccessful()) {
-                    if (isAdded()) {
-                        Toast.makeText(requireContext(), "Xác nhận nhận hàng thành công.", Toast.LENGTH_SHORT).show();
-                    }
-                    dialog.dismiss();
-                    fetchOrders(); // Tải lại danh sách đơn hàng
-                } else {
-                    if (isAdded()) {
-                        Toast.makeText(requireContext(), "Xác nhận thất bại!", Toast.LENGTH_SHORT).show();
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(@NonNull Call<ResponseBody> call, @NonNull Throwable t) {
-                if (getActivity() instanceof BaseActivity) {
-                    ((BaseActivity) getActivity()).hideLoading();
-                }
-                if (isAdded()) {
-                    Toast.makeText(requireContext(), "Lỗi kết nối mạng", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
-    }
 
     // Create, Cancel
 

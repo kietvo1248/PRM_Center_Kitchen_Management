@@ -31,6 +31,10 @@ public class SessionManager {
     public String getRole() { 
         return prefs.getString(KEY_ROLE, null); 
     }
+    public String getStoreId() {
+        return prefs.getString(KEY_STORE_ID, null);
+    }
+
 
     public void saveAuthToken(String token) {
         prefs.edit().putString(KEY_TOKEN, token).apply();

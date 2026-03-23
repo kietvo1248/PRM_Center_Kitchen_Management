@@ -14,6 +14,8 @@ import com.example.prm_center_kitchen_management.model.response.LoginResponse;
 import com.example.prm_center_kitchen_management.model.response.UserProfileResponse;
 import com.example.prm_center_kitchen_management.model.response.CatalogResponse;
 import com.example.prm_center_kitchen_management.model.response.ShipmentResponse;
+import com.example.prm_center_kitchen_management.model.response.ShipmentDetailResponse;
+import com.example.prm_center_kitchen_management.model.response.ReceiveAllResponse;
 import com.example.prm_center_kitchen_management.model.request.CreateOrderRequest;
 import com.example.prm_center_kitchen_management.model.response.OrderResponse;
 import com.example.prm_center_kitchen_management.model.response.OrderDetailResponse;
@@ -179,8 +181,24 @@ public interface ApiService {
     @PATCH("orders/franchise/{id}/cancel")
     Call<ResponseBody> cancelOrder(@Path("id") String id);
 
+    // My shipment
+    @GET("shipments/store/my")
+    Call<ApiResponse<PaginatedResponse<Shipment>>> getMyStoreShipments(
+            @Query("storeId") String storeId,
+            @Query("search") String search,
+            @Query("page") int page,
+            @Query("limit") int limit,
+            @Query("sortOrder") String sortOrder,
+            @Query("status") String status
+    );
+
+    // 2. Lấy chi tiết chuyến hàng
+    @GET("shipments/{id}")
+    Call<ApiResponse<ShipmentDetailResponse>> getShipmentDetail(@Path("id") String id);
+
+    // 3. Xác nhận nhận hàng (Chuyển từ Order qua)
     @POST("shipments/{id}/receive-all")
-    Call<ResponseBody> receiveAllShipment(@Path("id") String id);
+    Call<ApiResponse<ReceiveAllResponse>> receiveAllShipment(@Path("id") String shipmentId);
 
     @GET("inventory/store")
     Call<InventoryResponse> getStoreInventory(@Query("page") int page, @Query("limit") int limit, @Query("sortBy") String sortBy, @Query("sortOrder") String sortOrder, @Query("search") String search);

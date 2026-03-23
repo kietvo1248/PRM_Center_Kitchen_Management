@@ -6,30 +6,26 @@ public class Shipment {
     @SerializedName("id")
     private String id;
 
-    @SerializedName("shipmentCode")
-    private String shipmentCode;
+    @SerializedName("orderId")
+    private String orderId;
+
+    @SerializedName("storeName")
+    private String storeName;
 
     @SerializedName("status")
-    private String status; // preparing, shipped, received, claimed
+    private String status;
 
-    @SerializedName("toStoreName")
-    private String toStoreName;
+    @SerializedName("shipDate")
+    private String shipDate;
 
-    @SerializedName("shippedDate")
-    private String shippedDate;
-
-    @SerializedName("fromWarehouseId")
-    private Integer fromWarehouseId;
-
-    @SerializedName("toStoreId")
-    private Integer toStoreId;
+    @SerializedName("createdAt")
+    private String createdAt;
 
     // Getters
     public String getId() { return id; }
-    public String getShipmentCode() { return shipmentCode; }
+    public String getOrderId() { return orderId; }
+    public String getStoreName() { return storeName; }
     public String getStatus() { return status; }
-    public String getToStoreName() { return toStoreName; }
-    public String getShippedDate() { return shippedDate; }
-    public Integer getFromWarehouseId() { return fromWarehouseId; }
-    public Integer getToStoreId() { return toStoreId; }
+    public String getShipDate() { return shipDate; }
+    public String getCreatedAt() { return createdAt; }
 }

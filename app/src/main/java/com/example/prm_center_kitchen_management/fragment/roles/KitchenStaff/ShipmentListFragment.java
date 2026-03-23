@@ -37,13 +37,16 @@ public class ShipmentListFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_shipment_list, container, false);
+        apiService = ApiClient.getClient(requireContext()).create(ApiService.class);
+
         initViews(view);
-        apiService = ApiClient.getClient(getContext()).create(ApiService.class);
-        
         loadShipments();
-        
-        swipeRefresh.setOnRefreshListener(this::loadShipments);
-        
+
+        // Bổ sung sự kiện vuốt để làm mới (nếu layout có hỗ trợ)
+        if (swipeRefresh != null) {
+            swipeRefresh.setOnRefreshListener(this::loadShipments);
+        }
+
         return view;
     }
 
@@ -53,31 +56,38 @@ public class ShipmentListFragment extends Fragment {
         swipeRefresh = view.findViewById(R.id.swipeRefresh);
 
         rvShipments.setLayoutManager(new LinearLayoutManager(getContext()));
-        adapter = new ShipmentAdapter(shipmentList);
+
+        // FIX LỖI: Thêm OnItemClickListener vào Constructor của Adapter
+        adapter = new ShipmentAdapter(shipmentList, shipment -> {
+            Toast.makeText(getContext(), "Đang xem chuyến: " + shipment.getId(), Toast.LENGTH_SHORT).show();
+            // Nếu bạn có làm chức năng Xem chi tiết cho Bếp Trung Tâm sau này thì gọi tại đây
+        });
+
         rvShipments.setAdapter(adapter);
     }
 
     private void loadShipments() {
-        progressBar.setVisibility(View.VISIBLE);
-        // Lấy tất cả shipment của bếp trung tâm
+        if (progressBar != null) progressBar.setVisibility(View.VISIBLE);
+
         apiService.getKitchenShipments(null).enqueue(new Callback<ApiResponse<List<Shipment>>>() {
             @Override
             public void onResponse(Call<ApiResponse<List<Shipment>>> call, Response<ApiResponse<List<Shipment>>> response) {
-                progressBar.setVisibility(View.GONE);
-                swipeRefresh.setRefreshing(false);
+                if (progressBar != null) progressBar.setVisibility(View.GONE);
+                if (swipeRefresh != null) swipeRefresh.setRefreshing(false);
+
                 if (response.isSuccessful() && response.body() != null) {
                     shipmentList = response.body().getData();
                     adapter.updateData(shipmentList);
                 } else {
-                    Toast.makeText(getContext(), "Failed to load shipments", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "Lỗi tải chuyến hàng", Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<ApiResponse<List<Shipment>>> call, Throwable t) {
-                progressBar.setVisibility(View.GONE);
-                swipeRefresh.setRefreshing(false);
-                Toast.makeText(getContext(), "Network error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                if (progressBar != null) progressBar.setVisibility(View.GONE);
+                if (swipeRefresh != null) swipeRefresh.setRefreshing(false);
+                Toast.makeText(getContext(), "Lỗi kết nối: " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }

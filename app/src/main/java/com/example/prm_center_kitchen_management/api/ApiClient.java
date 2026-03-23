@@ -145,4 +145,42 @@ public class ApiClient {
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         context.startActivity(intent);
     }
+
+    public static Retrofit getRetrofitInstance(Context context) {
+        if (retrofit == null) {
+
+            // Tạo OkHttpClient và thêm Interceptor để tự động gắn Token
+            OkHttpClient client = new OkHttpClient.Builder()
+                    .addInterceptor(new Interceptor() {
+                        @Override
+                        public Response intercept(Chain chain) throws IOException {
+                            Request originalRequest = chain.request();
+
+                            // Khởi tạo SessionManager để lấy Token
+                            SessionManager sessionManager = new SessionManager(context);
+                            String token = sessionManager.getToken(); // Lưu ý: Đảm bảo trong SessionManager của bạn có hàm getToken()
+
+                            // Nếu có token, gắn vào Header
+                            if (token != null && !token.isEmpty()) {
+                                Request newRequest = originalRequest.newBuilder()
+                                        .header("Authorization", "Bearer " + token)
+                                        .build();
+                                return chain.proceed(newRequest);
+                            }
+
+                            // Nếu không có token (VD: Lúc mới login), cứ gọi API bình thường
+                            return chain.proceed(originalRequest);
+                        }
+                    })
+                    .build();
+
+            // Khởi tạo Retrofit
+            retrofit = new Retrofit.Builder()
+                    .baseUrl(BASE_URL)
+                    .client(client) // Truyền client đã gắn token vào đây
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .build();
+        }
+        return retrofit;
+    }
 }

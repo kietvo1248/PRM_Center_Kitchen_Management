@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="12dp"
+    android:layout_marginBottom="8dp"
+    android:background="#F9F9F9">
+
+    <ImageView
+        android:id="@+id/ivProductImage"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:scaleType="centerCrop"
+        android:background="#E0E0E0"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginStart="12dp"
+        android:gravity="center_vertical">
+
+        <TextView
+            android:id="@+id/tvProductName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Tên sản phẩm"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            android:textColor="#000000"/>
+
+        <TextView
+            android:id="@+id/tvProductSku"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="SKU: ..."
+            android:textSize="13sp"
+            android:textColor="#666666"/>
+
+        <TextView
+            android:id="@+id/tvBatchAndQty"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Lô: ... | SL: ..."
+            android:textSize="13sp"
+            android:layout_marginTop="4dp"/>
+
+        <TextView
+            android:id="@+id/tvExpiry"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="HSD: ..."
+            android:textSize="12sp"
+            android:textColor="#D32F2F"
+            android:layout_marginTop="2dp"/>
+
+    </LinearLayout>
+</LinearLayout>
