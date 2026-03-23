@@ -31,16 +31,17 @@ public class ShipmentAdapter extends RecyclerView.Adapter<ShipmentAdapter.ViewHo
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         ShipmentResponse.ShipmentItem item = list.get(position);
-        
+
         String orderId = "N/A";
         if (item.getOrderId() != null) {
-            orderId = item.getOrderId().length() > 8 
-                    ? item.getOrderId().substring(0, 8) + "..." 
+            orderId = item.getOrderId().length() > 8
+                    ? item.getOrderId().substring(0, 8) + "..."
                     : item.getOrderId();
         }
-        
-        holder.tvOrderId.setText("Mã Đơn: " + orderId);
-        holder.tvDate.setText("Ngày tạo: " + item.getCreatedAt());
+
+        // Đã sửa thành tvShipmentCode và tvShippedDate
+        holder.tvShipmentCode.setText("Mã Đơn: " + orderId);
+        holder.tvShippedDate.setText("Ngày tạo: " + item.getCreatedAt());
 
         // Đổi màu Status dựa vào trạng thái
         String status = item.getStatus();
@@ -62,13 +63,16 @@ public class ShipmentAdapter extends RecyclerView.Adapter<ShipmentAdapter.ViewHo
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView tvOrderId, tvStatus, tvDate;
+        // Cập nhật tên biến cho giống với file XML để tránh crash
+        TextView tvShipmentCode, tvStatus, tvShippedDate, tvToStore;
 
         public ViewHolder(View itemView) {
             super(itemView);
-            tvOrderId = itemView.findViewById(R.id.tvOrderId);
+            // SỬA LỖI Ở ĐÂY: Sử dụng đúng ID từ file item_shipment.xml
+            tvShipmentCode = itemView.findViewById(R.id.tvShipmentCode);
             tvStatus = itemView.findViewById(R.id.tvStatus);
-            tvDate = itemView.findViewById(R.id.tvDate);
+            tvShippedDate = itemView.findViewById(R.id.tvShippedDate);
+            tvToStore = itemView.findViewById(R.id.tvToStore);
         }
     }
 }
