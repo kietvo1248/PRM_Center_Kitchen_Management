@@ -3,6 +3,7 @@ package com.example.prm_center_kitchen_management.fragment.roles.FranchiseStaff;
 import android.app.AlertDialog;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -173,7 +174,15 @@ public class FranchiseShipmentsFragment extends Fragment {
                     .setPositiveButton("Xác nhận", (dialogInterface, which) -> {
                         // Đóng Popup chi tiết trước khi gọi API
                         dialog.dismiss();
-                        receiveAll(detail.getId());
+                        String shipmentIdToSend = detail.getId().trim();
+
+                        // 2. In ra màn hình để kiểm chứng
+                        Toast.makeText(getContext(), "Đang duyệt Shipment ID: \n" + shipmentIdToSend, Toast.LENGTH_LONG).show();
+                        Log.d("DEBUG_RECEIVE", "Gửi API duyệt hàng với Shipment ID: " + shipmentIdToSend);
+                        Log.d("DEBUG_RECEIVE", "Order ID của chuyến này là: " + detail.getOrderId());
+
+                        // 3. Gọi API
+                        receiveAll(shipmentIdToSend);
                     })
                     .setNegativeButton("Hủy", null)
                     .show();

@@ -1,10 +1,16 @@
 package com.example.prm_center_kitchen_management.model.response;
 
+import com.google.gson.annotations.SerializedName;
 import java.util.List;
 
 public class ShipmentDetailResponse {
+    @SerializedName("id")
     private String id;
+
+    @SerializedName("orderId")
     private String orderId;
+
+    @SerializedName("status")
     private String status;
     private String createdAt;
     private OrderInfo order;

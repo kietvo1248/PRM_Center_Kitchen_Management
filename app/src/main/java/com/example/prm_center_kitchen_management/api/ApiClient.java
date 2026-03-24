@@ -18,7 +18,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 import java.util.concurrent.TimeUnit;
 
 public class ApiClient {
-    private static final String BASE_URL = "https://wdp301-api.vercel.app/wdp301-api/v1/";
+    private static final String BASE_URL = "https://wdp301-formobile.onrender.com/wdp301-api/v1/";
     private static volatile Retrofit retrofit = null;
     private static volatile ApiService refreshService = null;
     private static final Object LOCK = new Object();

@@ -6,8 +6,8 @@ import com.example.prm_center_kitchen_management.model.response.CoordinatorOrder
 import com.example.prm_center_kitchen_management.model.response.CoordinatorOrderReviewResponse;
 import com.example.prm_center_kitchen_management.model.response.CoordinatorPickingListResponse;
 import com.example.prm_center_kitchen_management.model.response.CoordinatorShipmentResponse;
-import com.example.prm_center_kitchen_management.model.response.OrderReviewResponse;
-import com.example.prm_center_kitchen_management.model.response.PickingListResponse;
+//import com.example.prm_center_kitchen_management.model.response.OrderReviewResponse;
+//import com.example.prm_center_kitchen_management.model.response.PickingListResponse;
 import com.example.prm_center_kitchen_management.model.response.RefreshTokenResponse;
 import com.example.prm_center_kitchen_management.model.request.ProfileUpdateRequest;
 import com.example.prm_center_kitchen_management.model.response.LoginResponse;
@@ -197,7 +197,7 @@ public interface ApiService {
     Call<ApiResponse<ShipmentDetailResponse>> getShipmentDetail(@Path("id") String id);
 
     // 3. Xác nhận nhận hàng (Chuyển từ Order qua)
-    @POST("shipments/{id}/receive-all")
+    @PATCH("shipments/{id}/receive-all")
     Call<ApiResponse<ReceiveAllResponse>> receiveAllShipment(@Path("id") String shipmentId);
 
     @GET("inventory/store")
